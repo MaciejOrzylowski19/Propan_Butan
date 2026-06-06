@@ -8,14 +8,14 @@ public class BaseContructorPropScaper : IPropScaper
 
         var start = text.IndexOf('(');
         var end = text.LastIndexOf(')');
-        var target = text.Substring(start + 1, end - start + 1);
+        var target = text.Substring(start + 1, end - start - 1);
         target = Regex.Replace(target, @"/\*.*?\*/", "", RegexOptions.Singleline);
         target = Regex.Replace(target, @"//[^\n]*", "");
         target = Regex.Replace(target, @"\s+", " ");
 
 
         var chunks = target.Split(",").ToList();
-        foreach (var item in chunks)
+        foreach (var item in chunks.Select(c => c.Trim()))
         {
             var prop = new PropInfo();
 
@@ -34,8 +34,8 @@ public class BaseContructorPropScaper : IPropScaper
                 splited.Remove("=");
                 splited.RemoveAt(splited.Count - 1);
             }
-            prop.Name = splited[0];
-            prop.Type = splited[1];
+            prop.Name = splited[1];
+            prop.Type = splited[0];
 
             t.Add(prop);
         }

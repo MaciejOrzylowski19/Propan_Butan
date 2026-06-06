@@ -1,9 +1,6 @@
-using System.Diagnostics;
-using Xunit.Abstractions;
-
 namespace PropanButan.Tests;
 
-public class RecordPropScaperTests(ITestOutputHelper output)
+public class RecordPropScaperTests
 {
     private readonly BaseContructorPropScaper _sut = new();
 
@@ -61,7 +58,6 @@ public class RecordPropScaperTests(ITestOutputHelper output)
     [Fact]
     public void GetProps_EmployeeDto_ReturnsSevenProps()
     {
-        Debugger.Launch();
         var result = _sut.GetProps(EmployeeDtoText);
         Assert.Equal(7, result.Count);
     }

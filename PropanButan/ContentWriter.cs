@@ -51,16 +51,21 @@ public class ContentWriter
         var classes = _scaper.ScapeFile(path);
 
         foreach (var cls in classes)
-            cls.Props = [.. cls.Props.Select(_mapper.MapProp)];
+            cls.Props = [.. cls.Props.Select(PropMapper.MapProp)];
         return classes;
     }
 
-    public static void CreateAndWrite(string path, string text) =>
+    public static void CreateAndWrite(string path, string text)
+    {
+        var directory = Path.GetDirectoryName(path);
+        if (!string.IsNullOrWhiteSpace(directory))
+            Directory.CreateDirectory(directory);
+
         File.WriteAllText(path, text);
+    }
 
     private static string ToCamelCase(string name) =>
         name.Length == 0 ? name : char.ToLower(name[0]) + name[1..];
 
     private readonly FileScaper _scaper = new();
-    private readonly PropMapper _mapper = new();
 }

@@ -181,7 +181,7 @@ public class FilePropScaperTests : IDisposable
     {
         File.WriteAllText(_tempFile, TemplateClasses3Content);
         var result = _sut.ScapeFile(_tempFile);
-        Assert.Equal(8, result.Count);
+        Assert.Equal(9, result.Count);
     }
 
     [Fact]

@@ -9,72 +9,64 @@ public class PropMapper
     private static HashSet<GenericTypeTemplate> _genericPropMap = new();
     private static string _nullableMap = "null";
 
-    public PropInfo MapProp(PropInfo prop)
+    public static PropInfo MapProp(PropInfo prop)
     {
-        var type = prop.Type;
         var target = prop.Clone();
+        target.Type = MapPropType(prop.Type);
+        return target;
+    }
 
-        //Walenie na czysto
+    public static string MapPropType(string type) => MapPropType(type, out _);
 
-        if (_defalaultPropsMap.ContainsKey(type))
-        {
-            target.Type = type;
-            return target;
-        }
-        
+    public static string MapPropType(string type, out bool isCombinated)
+    {
+        isCombinated = false;
+        if (_defalaultPropsMap.TryGetValue(type, out var mapped))
+            return mapped;
+
         var isNullable = false;
         if (type.Last() == '?')
         {
             isNullable = true;
             type = type[..^1];
+            isCombinated = true;
         }
 
-        if (_defalaultPropsMap.ContainsKey(type))
-        {
-            target.Type = type;
-            if (isNullable)
-            {
-                target.Type += (" | " + _nullableMap);
-            }
-            return target;
-        }
-        
+        if (_defalaultPropsMap.TryGetValue(type, out mapped))
+            return isNullable ? mapped + " | " + _nullableMap : mapped;
 
-
-        var genericsMatch = Regex.Match(type, @"\b(?:record(?:\s+(?:class|struct))?|class|struct)\s+\w+\s*<([^>]+)>");
+        var genericsMatch = Regex.Match(type, @"\w+<(.+)>");
         var generics = genericsMatch.Success
             ? genericsMatch.Groups[1].Value.Split(',').Select(g => g.Trim()).ToList()
             : [];
 
         if (generics.Count == 0)
-        {
-            //To oznacza że typ jest jakiś anonimowy i trzeba go walić na URA
-            target.Type = type;
-            if (isNullable)
-            {
-                target.Type += (" | " + _nullableMap);
-            }
-            return target;
-        }
+            return isNullable ? type + " | " + _nullableMap : type;
 
+        var baseType = type[..type.IndexOf('<')];
+        var template = _genericPropMap.FirstOrDefault(e => e.Type == baseType);
 
-        var template = _genericPropMap.First(e => e.Type.Split('<')[0] == type);
+        if (template is null)
+            return isNullable ? type + " | " + _nullableMap : type;
 
-        if (template.GenericLen == generics.Count)
-        {
-            target.Type = PutIntoGeneric(generics, template.RawMap);
-            if (isNullable)
-            {
-                target.Type += (" | " + _nullableMap);
-            }
-            return target;
-        }
-        else
-        {
+        if (template.GenericLen != generics.Count)
             throw new ArgumentException("Invalid generic name. Prop u wanted to map has different generic type len from ts template");
-        }
+        isCombinated = true;
+
+        var mappedGenerics = new List<string>(generics.Count);
+        foreach (var g in generics)
+        {
+            var res = MapPropType(g, out var innerCombinated);
+            if (innerCombinated)
+            {
+                res = "(" + res + ")";
+            }
+            mappedGenerics.Add(res);
         }
 
+        var result = PutIntoGeneric(mappedGenerics, template.RawMap);
+        return isNullable ? result + " | " + _nullableMap : result;
+    }
 
     private static string PutIntoGeneric(List<string> generics, string rawText)
     {
