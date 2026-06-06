@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PropanButan.Tests/PropanButan.Tests.csproj" />
+  <Project Path="PropanButan/PropanButan.csproj" />
+</Solution>

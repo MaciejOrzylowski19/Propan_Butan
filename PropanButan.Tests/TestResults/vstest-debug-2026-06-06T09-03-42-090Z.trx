@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="cda77ff6-a7f5-4dfe-a505-f75902f1f700" name="@fedora 2026-06-06 11:11:16" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-06-06T11:11:16.8564874+02:00" queuing="2026-06-06T11:11:16.8564875+02:00" start="2026-06-06T11:03:46.3586886+02:00" finish="2026-06-06T11:11:16.8575249+02:00" />
+  <TestSettings name="default" id="b2c2aa72-db80-439c-aefb-e29725bc33f3">
+    <Deployment runDeploymentRoot="_fedora_2026-06-06_11_11_16" />
+  </TestSettings>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="0" executed="0" passed="0" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Waiting for debugger attach...
+Process Id: 9353, Name: dotnet
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="fedora" outcome="Error" timestamp="2026-06-06T11:11:16.5721342+02:00">
+        <Text>vstest.console process failed to connect to testhost process after 450 seconds. This may occur due to machine slowness, please set environment variable VSTEST_CONNECTION_TIMEOUT to increase timeout.</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

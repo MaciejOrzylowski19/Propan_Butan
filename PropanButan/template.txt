@@ -1,0 +1,43 @@
+# Mapa typów C# → TypeScript
+ 
+# Typy liczbowe
+? : undefined
+int        : number
+long       : number
+short      : number
+byte       : number
+sbyte      : number
+uint       : number
+ulong      : number
+ushort     : number
+float      : number
+double     : number
+decimal    : number
+ 
+# Typy proste
+bool       : boolean
+char       : string
+string     : string
+object     : unknown
+dynamic    : any
+void       : void
+ 
+# Typy daty / specjalne
+DateTime         : Date
+DateTimeOffset   : Date
+TimeSpan         : string
+Guid             : string
+byte[]           : Uint8Array
+ 
+# Kolekcje
+List<T>          : T[]
+IList<T>         : T[]
+IEnumerable<T>   : T[]
+ICollection<T>   : T[]
+T[]              : T[]
+Dictionary<K,V>  : Record<K, V>
+IDictionary<K,V> : Record<K, V>
+HashSet<T>       : Set<T>
+Tuple<T1,T2>     : [T1, T2]
+KeyValuePair<K,V>: [K, V]
+ 
